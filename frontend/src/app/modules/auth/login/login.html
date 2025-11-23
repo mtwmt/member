@@ -1,0 +1,87 @@
+<div class="min-h-screen flex items-center justify-center bg-base-200">
+  <div class="card w-96 bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-2xl font-bold text-center justify-center mb-4">會員登入</h2>
+
+      @if (authStore.error()) {
+      <div class="alert alert-error">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 shrink-0 stroke-current"
+          fill="none"
+          viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{{ authStore.error() }}</span>
+      </div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">電子郵件</span>
+          </label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="請輸入電子郵件"
+            class="input input-bordered w-full"
+            [class.input-error]="email?.invalid && email?.touched" />
+          @if (email?.invalid && email?.touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">
+              @if (email?.errors?.['required']) { 請輸入電子郵件 } @if (email?.errors?.['email']) {
+              電子郵件格式不正確 }
+            </span>
+          </label>
+          }
+        </div>
+
+        <div class="form-control w-full mt-4">
+          <label class="label">
+            <span class="label-text">密碼</span>
+          </label>
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="請輸入密碼"
+            class="input input-bordered w-full"
+            [class.input-error]="password?.invalid && password?.touched" />
+          @if (password?.invalid && password?.touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">
+              @if (password?.errors?.['required']) { 請輸入密碼 } @if
+              (password?.errors?.['minlength']) { 密碼至少需要 6 個字元 }
+            </span>
+          </label>
+          }
+        </div>
+
+        <div class="form-control mt-6">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="authStore.isLoading()"
+            [class.loading]="authStore.isLoading()">
+            @if (authStore.isLoading()) {
+            <span class="loading loading-spinner"></span>
+            登入中... } @else { 登入 }
+          </button>
+        </div>
+
+        <div class="divider">或</div>
+
+        <div class="text-center">
+          <p class="text-sm">
+            還沒有帳號？
+            <a routerLink="/auth/register" class="link link-primary">立即註冊</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

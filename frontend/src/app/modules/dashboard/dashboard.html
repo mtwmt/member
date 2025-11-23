@@ -1,0 +1,122 @@
+<div class="min-h-screen bg-base-200">
+  <div class="navbar bg-base-100 shadow-lg">
+    <div class="flex-1">
+      <a class="btn btn-ghost text-xl">會員系統</a>
+    </div>
+    <div class="flex-none">
+      <button class="btn btn-ghost" (click)="onLogout()">登出</button>
+    </div>
+  </div>
+
+  <div class="container mx-auto p-8">
+    @if (authStore.isLoading()) {
+    <div class="flex justify-center items-center h-64">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+    } @else if (authStore.user()) {
+    <div class="grid gap-6">
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title text-2xl mb-4">歡迎回來!</h2>
+          <div class="divider"></div>
+
+          <div class="space-y-4">
+            <div class="flex items-center gap-4">
+              <div class="avatar placeholder">
+                <div class="bg-primary text-primary-content w-16 rounded-full">
+                  <span class="text-2xl">{{
+                    (authStore.user()?.username || '').charAt(0).toUpperCase()
+                  }}</span>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold">{{ authStore.user()?.username }}</h3>
+                <p class="text-sm text-base-content/70">{{ authStore.user()?.email }}</p>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="stat bg-base-200 rounded-lg">
+                <div class="stat-title">帳號狀態</div>
+                <div class="stat-value text-lg">
+                  @if (authStore.user()?.isLogin) {
+                  <div class="badge badge-success gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      class="inline-block h-4 w-4 stroke-current">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    已啟用
+                  </div>
+                  } @else {
+                  <div class="badge badge-error gap-2">停用</div>
+                  }
+                </div>
+              </div>
+
+              <div class="stat bg-base-200 rounded-lg">
+                <div class="stat-title">註冊時間</div>
+                <div class="stat-value text-sm">
+                  {{ authStore.user()?.createdTime | date: 'yyyy/MM/dd HH:mm' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">使用者資訊</h2>
+          <div class="divider"></div>
+          <div class="overflow-x-auto">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th>使用者 ID</th>
+                  <td>{{ authStore.user()?.id }}</td>
+                </tr>
+                <tr>
+                  <th>使用者名稱</th>
+                  <td>{{ authStore.user()?.username }}</td>
+                </tr>
+                <tr>
+                  <th>電子郵件</th>
+                  <td>{{ authStore.user()?.email }}</td>
+                </tr>
+                <tr>
+                  <th>註冊時間</th>
+                  <td>{{ authStore.user()?.createdTime | date: 'yyyy年MM月dd日 HH:mm:ss' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @else if (authStore.error()) {
+    <div class="alert alert-error">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 shrink-0 stroke-current"
+        fill="none"
+        viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ authStore.error() }}</span>
+    </div>
+    }
+  </div>
+</div>

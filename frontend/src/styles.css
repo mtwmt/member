@@ -1,0 +1,7 @@
+/* Tailwind CSS v4 - 只需要一行! */
+@import "tailwindcss";
+
+/* DaisyUI 主題配置 */
+@plugin "daisyui";
+
+/* 全域樣式 */
